@@ -5,7 +5,7 @@ metadata:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/part-of: kube-prometheus
-    app.kubernetes.io/version: 2.3.0
+    app.kubernetes.io/version: 2.4.1
   name: kube-state-metrics
   namespace: monitoring
 spec:
@@ -23,15 +23,16 @@ spec:
         app.kubernetes.io/component: exporter
         app.kubernetes.io/name: kube-state-metrics
         app.kubernetes.io/part-of: kube-prometheus
-        app.kubernetes.io/version: 2.3.0
+        app.kubernetes.io/version: 2.4.1
     spec:
+      automountServiceAccountToken: true
       containers:
       - args:
         - --host=127.0.0.1
         - --port=8081
         - --telemetry-host=127.0.0.1
         - --telemetry-port=8082
-        image: k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.3.0
+        image: k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.4.1
         name: kube-state-metrics
         resources:
           limits:
@@ -41,6 +42,11 @@ spec:
             cpu: 10m
             memory: 190Mi
         securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
           runAsUser: 65534
       - args:
         - --logtostderr
@@ -60,6 +66,11 @@ spec:
             cpu: 20m
             memory: 20Mi
         securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
           runAsGroup: 65532
           runAsNonRoot: true
           runAsUser: 65532
@@ -81,6 +92,11 @@ spec:
             cpu: 10m
             memory: 20Mi
         securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
           runAsGroup: 65532
           runAsNonRoot: true
           runAsUser: 65532
